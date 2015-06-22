@@ -1,0 +1,15 @@
+﻿<Window x:Class="SnakeControlTestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:SnakeControlTestApp"
+		xmlns:customControls="clr-namespace:WpfCustomControlsLibrary;assembly=WpfCustomControlsLibrary"
+        Title="MainWindow" Height="350" Width="525">
+
+	<Window.DataContext>
+		<local:MainWindowViewModel />
+	</Window.DataContext>
+
+	<customControls:SnakeControl ItemsSource="{Binding Items}"/>
+	
+	<!--<ItemsControl ItemsSource="{Binding Items}"/>-->
+</Window>
