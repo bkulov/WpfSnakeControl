@@ -13,9 +13,16 @@ namespace SnakeControlTestApp
 		{
 			get
 			{
-				for (int i = 0; i < 20; i++)
+				for (int i = 0; i < 10; i++)
 				{
-					yield return "Item " + i;
+					yield return "Long long long item " + i;
+				}
+
+				yield return "A very looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong item";
+
+				for (int i = 10; i < 30; i++)
+				{
+					yield return "Very long long long long item " + i;
 				}
 			}
 		}

@@ -14,13 +14,13 @@ namespace WpfCustomControlsLibrary
 		/// </summary>
 		protected override Size MeasureOverride(Size constraint)
 		{
-			Size currentRowSize = new Size();
-			Size panelSize = new Size();
+			var currentRowSize = new Size();
+			var panelSize = new Size();
 
 			foreach (UIElement element in this.InternalChildren)
 			{
 				element.Measure(constraint);
-				Size desiredSize = element.DesiredSize;
+				var desiredSize = element.DesiredSize;
 
 				if (currentRowSize.Width + desiredSize.Width > constraint.Width)
 				{
@@ -28,14 +28,6 @@ namespace WpfCustomControlsLibrary
 					panelSize.Width = Math.Max(currentRowSize.Width, panelSize.Width);
 					panelSize.Height += currentRowSize.Height;
 					currentRowSize = desiredSize;
-
-					// if the current element is larger than the constraint, put it on separate row
-					if (desiredSize.Width > constraint.Width)
-					{
-						panelSize.Width = Math.Max(desiredSize.Width, panelSize.Width);
-						panelSize.Height += desiredSize.Height;
-						currentRowSize = new Size();
-					}
 				}
 				else
 				{
@@ -60,31 +52,24 @@ namespace WpfCustomControlsLibrary
 		/// </summary>
 		protected override Size ArrangeOverride(Size arrangeBounds)
 		{
-			int firstItemIndex = 0;
-			Size currentRowSize = new Size();
-			double accumulatedHeight = 0;
-			UIElementCollection elements = this.InternalChildren;
+			var firstItemIndex = 0;
+			var currentRowSize = new Size();
+			var accumulatedHeight = 0d;
+			var elements = this.InternalChildren;
+			var isEvenRow = true;
 
 			for (int i = 0; i < elements.Count; i++)
 			{
-				Size desiredSize = elements[i].DesiredSize;
+				var desiredSize = elements[i].DesiredSize;
 
-				// need to switch to another row
 				if (currentRowSize.Width + desiredSize.Width > arrangeBounds.Width)
 				{
-					this.ArrangeRow(accumulatedHeight, currentRowSize.Height, firstItemInLine: firstItemIndex, lastItemInLine: i, arrangeBounds: arrangeBounds);
+					// need to switch to another row
+					this.ArrangeRow(accumulatedHeight, currentRowSize.Height, arrangeBounds, isEvenRow, firstItemInRow: firstItemIndex, lastItemInRow: i);
 
 					accumulatedHeight += currentRowSize.Height;
 					currentRowSize = desiredSize;
-
-					// TODO: bvk - check if this is needed. probably the if above will handle the case correctly. Same applies to the MeasureOverride
-					// if the current element is larger than the constraint, put it on separate row
-					if (desiredSize.Width > arrangeBounds.Width)
-					{
-						this.ArrangeRow(accumulatedHeight, desiredSize.Width, firstItemInLine: i, lastItemInLine: ++i, arrangeBounds: arrangeBounds);
-						accumulatedHeight += desiredSize.Height;
-						currentRowSize = new Size();
-					}
+					isEvenRow = !isEvenRow;
 
 					firstItemIndex = i;
 				}
@@ -96,48 +81,56 @@ namespace WpfCustomControlsLibrary
 				}
 			}
 
-			// there are an unarranged items. arrange them
+			// there are unarranged items. arrange them
 			if (firstItemIndex < elements.Count)
-				this.ArrangeRow(accumulatedHeight, currentRowSize.Width, firstItemInLine: firstItemIndex, lastItemInLine: elements.Count, arrangeBounds: arrangeBounds);
+				this.ArrangeRow(accumulatedHeight, currentRowSize.Width, arrangeBounds, isEvenRow, firstItemInRow: firstItemIndex, lastItemInRow: elements.Count);
 
 			return arrangeBounds;
 		}
 
-		private void ArrangeRow(double accumulatedHeight, double rowHeight, int firstItemInLine, int lastItemInLine, Size arrangeBounds)
+		private void ArrangeRow(double accumulatedHeight, double rowHeight, Size arrangeBounds, bool isEvenRow, int firstItemInRow, int lastItemInRow)
 		{
-			double x = 0;
-			double totalChildWidth = 0;
-			double tallestChildHeight = 0;
-			double yOffset = 0;
-
-			UIElementCollection children = this.InternalChildren;
+			var tallestChildHeight = 0d;
+			var yOffset = 0d;
+			var children = this.InternalChildren;
 			UIElement child;
 
-			for (int i = firstItemInLine; i < lastItemInLine; i++)
+			// calculate the row's tallest element. its height will be used later to center all elements in the row
+			for (int i = firstItemInRow; i < lastItemInRow; i++)
 			{
 				child = children[i];
-				totalChildWidth += child.DesiredSize.Width;
 				if (child.DesiredSize.Height > tallestChildHeight)
 				{
 					tallestChildHeight = child.DesiredSize.Height;
 				}
 			}
 
-			// TODO: check this outs
-			//work out x start offset within a given column
-			x = ((arrangeBounds.Width - totalChildWidth) / 2);
+			var x = isEvenRow ? 0 : arrangeBounds.Width;
 
-			for (int i = firstItemInLine; i < lastItemInLine; i++)
+			// position the elements in row
+			for (int i = firstItemInRow; i < lastItemInRow; i++)
 			{
 				child = children[i];
+				// center the element vertically if needed
 				if (child.DesiredSize.Height < tallestChildHeight)
 				{
 					yOffset = ((tallestChildHeight - child.DesiredSize.Height) / 2);
 				}
 
+				// if its an odd row, position the elements from right to left
+				if (!isEvenRow)
+				{
+					x -= child.DesiredSize.Width;
+				}
+
 				child.Arrange(new Rect(x, accumulatedHeight + yOffset, child.DesiredSize.Width, rowHeight));
-				x += child.DesiredSize.Width;
 				yOffset = 0;
+
+				// if its an even row, position the elements from left to right
+				if (isEvenRow)
+				{
+					x += child.DesiredSize.Width;
+				}
 			}
 		}
 	}
