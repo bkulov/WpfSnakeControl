@@ -10,6 +10,4 @@
 	</Window.DataContext>
 
 	<customControls:SnakeControl ItemsSource="{Binding Items}"/>
-	
-	<!--<ItemsControl ItemsSource="{Binding Items}"/>-->
 </Window>

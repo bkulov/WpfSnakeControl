@@ -11,13 +11,19 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
 							SnapsToDevicePixels="true"
 							Padding="1">
-						<ScrollViewer Padding="{TemplateBinding Padding}"
-									  Focusable="false">
+						<ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
 							<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 						</ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+		<Setter Property="ItemsPanel">
+			<Setter.Value>
+				<ItemsPanelTemplate>
+					<local:SnakePanel />
+				</ItemsPanelTemplate>
+			</Setter.Value>
+		</Setter>
     </Style>
 </ResourceDictionary>
