@@ -9,21 +9,41 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-							SnapsToDevicePixels="true"
-							Padding="1">
-						<ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
-							<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-						</ScrollViewer>
+                            SnapsToDevicePixels="true"
+                            Padding="1">
+                        <ScrollViewer Padding="{TemplateBinding Padding}" Focusable="false">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-		<Setter Property="ItemsPanel">
-			<Setter.Value>
-				<ItemsPanelTemplate>
-					<local:SnakePanel />
-				</ItemsPanelTemplate>
-			</Setter.Value>
-		</Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <local:SnakePanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style>
+                    <Setter Property="Control.Margin" Value="5, 2"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ToggleButton Content="{Binding}">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 </ResourceDictionary>
