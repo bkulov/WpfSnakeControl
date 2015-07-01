@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace SnakeControlTestApp
 {
+	/// <summary>
+	/// View model used as a data context of the main window.
+	/// </summary>
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;

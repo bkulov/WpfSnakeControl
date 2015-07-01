@@ -5,7 +5,10 @@ using System.Windows.Controls;
 
 namespace WpfCustomControlsLibrary
 {
-	internal class SnakePanel : Panel
+	/// <summary>
+	/// Custom panel which provides a `snaking` layout
+	/// </summary>
+	public class SnakePanel : Panel
 	{
 		/// <summary>
 		/// From MSDN : When overridden in a derived class, measures the 
@@ -83,7 +86,7 @@ namespace WpfCustomControlsLibrary
 
 			// there are unarranged items. arrange them
 			if (firstItemIndex < elements.Count)
-				this.ArrangeRow(accumulatedHeight, currentRowSize.Width, arrangeBounds, isEvenRow, firstItemInRow: firstItemIndex, lastItemInRow: elements.Count);
+				this.ArrangeRow(accumulatedHeight, currentRowSize.Height, arrangeBounds, isEvenRow, firstItemInRow: firstItemIndex, lastItemInRow: elements.Count);
 
 			return arrangeBounds;
 		}

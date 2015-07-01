@@ -5,7 +5,9 @@ using System.Windows.Controls;
 
 namespace WpfCustomControlsLibrary
 {
-	// TODO: do we need this control?
+	/// <summary>
+	/// An ItemsControl derived class which provides a `snaking` layout, list binding and scrolling.
+	/// </summary>
 	public class SnakeControl : ItemsControl
 	{
 		static SnakeControl()
